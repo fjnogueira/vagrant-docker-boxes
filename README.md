@@ -36,6 +36,27 @@ If you have Vagrant 1.5, you can use our boxes through [Vagrant Cloud](https://v
     # -OR-
     vagrant init phusion/ubuntu-12.04-amd64
 
+## Bridged Network configuration
+
+The initial setup does NOT include access to the current host's network. That's a frustrating initial piece that needs to get out of the way or rebuild. In order to access the host's network, use bridged configuration by adding the following line to the configuration for Virtualbox:
+
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+
+As of July 2014, Vagrant 1.6.3, this configuration in my machine is as follows:
+
+    config.vm.provider "virtualbox" do |vb|
+      #   # Don't boot with headless mode
+      #   vb.gui = true
+      #
+      #   # Use VBoxManage to customize the VM. For example to change memory:
+      #   vb.customize ["modifyvm", :id, "--memory", "1024"]
+          vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    end
+
+You can then do vagrant up, and then vagrant ssh to install Docker.
+
+## Configuration
+
 On older Vagrant versions, you can modify your Vagrantfile to use our boxes. Here is an example Vagrantfile which works with both VirtualBox and VMWare Fusion. It also automatically installs the latest version of Docker.
 
     # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
